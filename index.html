@@ -6,40 +6,27 @@
   <meta name="theme-color" content="#111827" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <title>Navijački AI V2.2</title>
+  <title>Navijački AI V2.3</title>
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <main class="app-shell">
     <header class="hero">
-      <span class="eyebrow">Verzija 2.2</span>
+      <span class="eyebrow">Verzija 2.3</span>
       <h1>⚽🏀 Navijački AI</h1>
-      <p>Ubaci kopiranu poruku, izaberi najbolji odgovor i pošalji ga kroz Viber.</p>
+      <p>Ubaci poruku, izaberi jačinu odgovora i pošalji ga uz vest ili sliku za Partizan.</p>
     </header>
 
     <section class="card settings-grid" aria-label="Podešavanja">
       <label>Moj klub
-        <select id="myClub">
-          <option value="Partizan">Partizan</option>
-          <option value="Crvena zvezda">Crvena zvezda</option>
-          <option value="Drugi klub">Drugi klub</option>
-        </select>
+        <select id="myClub"><option>Partizan</option><option>Crvena zvezda</option><option>Drugi klub</option></select>
       </label>
       <label>Njegov klub
-        <select id="rivalClub">
-          <option value="Crvena zvezda">Crvena zvezda</option>
-          <option value="Partizan">Partizan</option>
-          <option value="Drugi klub">Drugi klub</option>
-        </select>
+        <select id="rivalClub"><option>Crvena zvezda</option><option>Partizan</option><option>Drugi klub</option></select>
       </label>
       <label>Sport
-        <select id="sport">
-          <option value="auto">Automatski prepoznaj</option>
-          <option value="fudbal">Fudbal</option>
-          <option value="košarka">Košarka</option>
-          <option value="oba">Fudbal i košarka</option>
-        </select>
+        <select id="sport"><option value="auto">Automatski prepoznaj</option><option value="fudbal">Fudbal</option><option value="košarka">Košarka</option><option value="oba">Fudbal i košarka</option></select>
       </label>
       <label>Ime drugara
         <input id="friendName" type="text" placeholder="npr. Marko" maxlength="30" />
@@ -47,24 +34,15 @@
     </section>
 
     <section class="card">
-      <div class="input-head">
-        <label for="message">Njegova poruka</label>
-        <button id="pasteClipboard" class="clipboard-button">📋 Ubaci kopiranu poruku</button>
-      </div>
-      <p id="clipboardNote" class="helper-text">Na iPhone/iPad uređaju pregledač će tražiti dozvolu za čitanje kopiranog teksta.</p>
+      <div class="input-head"><label for="message">Njegova poruka</label><button id="pasteClipboard" class="clipboard-button">📋 Ubaci kopiranu poruku</button></div>
+      <p id="clipboardNote" class="helper-text">Na iPhone/iPad uređaju pregledač može tražiti dozvolu za clipboard.</p>
       <textarea id="message" rows="5" maxlength="600" placeholder="Nalepi ovde njegovu prozivku…"></textarea>
-      <div class="message-meta">
-        <span id="detectedSport">Sport: automatski</span>
-        <span id="charCount">0/600</span>
-      </div>
+      <div class="message-meta"><span id="detectedSport">Sport: automatski</span><span id="charCount">0/600</span></div>
       <button id="analyze" class="secondary">🧠 Analiziraj poruku</button>
     </section>
 
     <section id="analysisPanel" class="analysis-panel hidden" aria-live="polite">
-      <div class="analysis-head">
-        <h2>Navijački IQ</h2>
-        <span id="iqScore" class="score">0/10</span>
-      </div>
+      <div class="analysis-head"><h2>Navijački IQ</h2><span id="iqScore" class="score">0/10</span></div>
       <div class="analysis-grid">
         <div><span>Tema</span><strong id="topicValue">—</strong></div>
         <div><span>Sport</span><strong id="sportValue">—</strong></div>
@@ -76,38 +54,41 @@
 
     <section class="card">
       <label for="persona">Odgovori kao…</label>
-      <select id="persona">
-        <option value="normalan">Ja lično</option>
-        <option value="komentator">Sportski komentator</option>
-        <option value="advokat">Advokat</option>
-        <option value="profesor">Profesor istorije</option>
-        <option value="trener">Trener</option>
-        <option value="novinar">Sportski novinar</option>
-      </select>
-
+      <select id="persona"><option value="normalan">Ja lično</option><option value="komentator">Sportski komentator</option><option value="advokat">Advokat</option><option value="profesor">Profesor istorije</option><option value="trener">Trener</option><option value="novinar">Sportski novinar</option></select>
       <div class="tone-grid" role="group" aria-label="Izaberi ton odgovora">
         <button class="tone active" data-tone="duhovit">🤣 Duhovit</button>
         <button class="tone" data-tone="cinjenice">📚 Činjenice</button>
-        <button class="tone" data-tone="ostar">🔥 Poklopi ga</button>
+        <button class="tone" data-tone="ostar">🔥 Oštar</button>
+        <button class="tone" data-tone="brutalan">💣 Baš oštar</button>
         <button class="tone" data-tone="kulturan">😇 Kulturan</button>
-        <button class="tone" data-tone="istorijski">🏆 Istorijski</button>
         <button class="tone" data-tone="grupa">🎤 Nasmej društvo</button>
       </div>
-
       <button id="generate" class="primary">Napravi najbolji odgovor</button>
+    </section>
+
+    <section class="card media-card">
+      <div class="history-head"><h2>📰 Partizan pojačanje</h2></div>
+      <p class="helper-text">Otvori aktuelnu vest ili sliku, pa nalepi njen link ispod. Link će se dodati svakom odgovoru koji deliš.</p>
+      <div class="media-links">
+        <a href="https://partizan.rs/vesti/" target="_blank" rel="noopener">Zvanične FK Partizan vesti</a>
+        <a href="https://news.google.com/search?q=Partizan&hl=sr&gl=RS&ceid=RS%3Asr" target="_blank" rel="noopener">Najnovije Partizan vesti</a>
+        <a href="https://www.google.com/search?tbm=isch&q=Partizan+FK+KK" target="_blank" rel="noopener">Pronađi Partizan sliku</a>
+      </div>
+      <label for="mediaLink">Link vesti ili slike
+        <input id="mediaLink" type="url" inputmode="url" placeholder="https://…" />
+      </label>
+      <div class="media-actions"><button id="useMedia" class="secondary">➕ Dodaj uz odgovor</button><button id="clearMedia" class="text-button">Ukloni link</button></div>
+      <p id="mediaStatus" class="helper-text"></p>
     </section>
 
     <section id="results" class="results" aria-live="polite"></section>
 
     <section class="card history-card">
-      <div class="history-head">
-        <h2>Poslednje rasprave</h2>
-        <button id="clearHistory" class="text-button">Obriši</button>
-      </div>
+      <div class="history-head"><h2>Poslednje rasprave</h2><button id="clearHistory" class="text-button">Obriši</button></div>
       <div id="historyList" class="history-list"></div>
     </section>
 
-    <footer><p>Bez psovki i pretnji — rivalstvo ostaje zabava.</p></footer>
+    <footer><p>Može oštro, ali bez pretnji, govora mržnje i ličnih uvreda.</p></footer>
   </main>
 
   <template id="replyTemplate">
@@ -116,6 +97,7 @@
       <div class="reply-content">
         <span class="reply-badge"></span>
         <p class="reply-text"></p>
+        <small class="attached-link hidden"></small>
         <div class="reply-actions">
           <button class="share-button">📤 Pošalji u Viber</button>
           <button class="shorten-button">✂️ Skrati</button>
