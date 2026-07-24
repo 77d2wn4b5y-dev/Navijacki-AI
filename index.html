@@ -6,37 +6,34 @@
   <meta name="theme-color" content="#111827" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <title>Navijački AI</title>
+  <title>Navijački AI V2</title>
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <main class="app-shell">
     <header class="hero">
-      <span class="eyebrow">Tvoj navijački pomoćnik</span>
+      <span class="eyebrow">Verzija 2</span>
       <h1>⚽🏀 Navijački AI</h1>
-      <p>Nalepi poruku sa Vibera, a aplikacija može sama da prepozna sport i smisli odgovor.</p>
+      <p>Nalepi poruku, analiziraj prozivku i izaberi kako želiš da odgovoriš.</p>
     </header>
 
     <section class="card settings-grid" aria-label="Podešavanja">
-      <label>
-        Moj klub
+      <label>Moj klub
         <select id="myClub">
           <option value="Partizan">Partizan</option>
           <option value="Crvena zvezda">Crvena zvezda</option>
           <option value="custom">Drugi klub</option>
         </select>
       </label>
-      <label>
-        Njegov klub
+      <label>Njegov klub
         <select id="rivalClub">
           <option value="Crvena zvezda">Crvena zvezda</option>
           <option value="Partizan">Partizan</option>
           <option value="custom">Drugi klub</option>
         </select>
       </label>
-      <label>
-        Sport
+      <label>Sport
         <select id="sport">
           <option value="auto">Automatski prepoznaj</option>
           <option value="fudbal">Fudbal</option>
@@ -44,8 +41,7 @@
           <option value="oba">Fudbal i košarka</option>
         </select>
       </label>
-      <label>
-        Ime drugara
+      <label>Ime drugara
         <input id="friendName" type="text" placeholder="npr. Marko" maxlength="30" />
       </label>
     </section>
@@ -57,12 +53,41 @@
         <span id="detectedSport">Sport: automatski</span>
         <span id="charCount">0/600</span>
       </div>
+      <button id="analyze" class="secondary">🧠 Analiziraj poruku</button>
+    </section>
+
+    <section id="analysisPanel" class="analysis-panel hidden" aria-live="polite">
+      <div class="analysis-head">
+        <h2>Navijački IQ</h2>
+        <span id="iqScore" class="score">0/10</span>
+      </div>
+      <div class="analysis-grid">
+        <div><span>Tema</span><strong id="topicValue">—</strong></div>
+        <div><span>Sport</span><strong id="sportValue">—</strong></div>
+        <div><span>Ton</span><strong id="toneValue">—</strong></div>
+        <div><span>Promena teme</span><strong id="switchValue">—</strong></div>
+      </div>
+      <p id="analysisAdvice" class="analysis-advice"></p>
+    </section>
+
+    <section class="card">
+      <label for="persona">Odgovori kao…</label>
+      <select id="persona">
+        <option value="normalan">Ja lično</option>
+        <option value="komentator">Sportski komentator</option>
+        <option value="advokat">Advokat</option>
+        <option value="profesor">Profesor istorije</option>
+        <option value="trener">Trener</option>
+        <option value="novinar">Sportski novinar</option>
+      </select>
 
       <div class="tone-grid" role="group" aria-label="Izaberi ton odgovora">
         <button class="tone active" data-tone="duhovit">🤣 Duhovit</button>
         <button class="tone" data-tone="cinjenice">📚 Činjenice</button>
         <button class="tone" data-tone="ostar">🔥 Poklopi ga</button>
         <button class="tone" data-tone="kulturan">😇 Kulturan</button>
+        <button class="tone" data-tone="istorijski">🏆 Istorijski</button>
+        <button class="tone" data-tone="grupa">🎤 Nasmej društvo</button>
       </div>
 
       <button id="generate" class="primary">Napravi odgovore</button>
@@ -70,9 +95,15 @@
 
     <section id="results" class="results" aria-live="polite"></section>
 
-    <footer>
-      <p>Bez psovki i pretnji — rivalstvo ostaje zabava.</p>
-    </footer>
+    <section class="card history-card">
+      <div class="history-head">
+        <h2>Poslednje rasprave</h2>
+        <button id="clearHistory" class="text-button">Obriši</button>
+      </div>
+      <div id="historyList" class="history-list"></div>
+    </section>
+
+    <footer><p>Bez psovki i pretnji — rivalstvo ostaje zabava.</p></footer>
   </main>
 
   <template id="replyTemplate">
