@@ -1,0 +1,11 @@
+{
+  "name": "Navijački AI",
+  "short_name": "Navijački AI",
+  "description": "Navijački pomoćnik za duhovite odgovore na poruke.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#080d18",
+  "theme_color": "#111827",
+  "lang": "sr",
+  "icons": []
+}
