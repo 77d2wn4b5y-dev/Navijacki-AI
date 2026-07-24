@@ -6,16 +6,16 @@
   <meta name="theme-color" content="#111827" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <title>Navijački AI V2</title>
+  <title>Navijački AI V2.2</title>
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <main class="app-shell">
     <header class="hero">
-      <span class="eyebrow">Verzija 2.1</span>
+      <span class="eyebrow">Verzija 2.2</span>
       <h1>⚽🏀 Navijački AI</h1>
-      <p>Nalepi poruku, analiziraj prozivku, izaberi odgovor i pošalji ga pravo kroz Viber.</p>
+      <p>Ubaci kopiranu poruku, izaberi najbolji odgovor i pošalji ga kroz Viber.</p>
     </header>
 
     <section class="card settings-grid" aria-label="Podešavanja">
@@ -23,14 +23,14 @@
         <select id="myClub">
           <option value="Partizan">Partizan</option>
           <option value="Crvena zvezda">Crvena zvezda</option>
-          <option value="custom">Drugi klub</option>
+          <option value="Drugi klub">Drugi klub</option>
         </select>
       </label>
       <label>Njegov klub
         <select id="rivalClub">
           <option value="Crvena zvezda">Crvena zvezda</option>
           <option value="Partizan">Partizan</option>
-          <option value="custom">Drugi klub</option>
+          <option value="Drugi klub">Drugi klub</option>
         </select>
       </label>
       <label>Sport
@@ -47,7 +47,11 @@
     </section>
 
     <section class="card">
-      <label for="message">Njegova poruka</label>
+      <div class="input-head">
+        <label for="message">Njegova poruka</label>
+        <button id="pasteClipboard" class="clipboard-button">📋 Ubaci kopiranu poruku</button>
+      </div>
+      <p id="clipboardNote" class="helper-text">Na iPhone/iPad uređaju pregledač će tražiti dozvolu za čitanje kopiranog teksta.</p>
       <textarea id="message" rows="5" maxlength="600" placeholder="Nalepi ovde njegovu prozivku…"></textarea>
       <div class="message-meta">
         <span id="detectedSport">Sport: automatski</span>
@@ -90,7 +94,7 @@
         <button class="tone" data-tone="grupa">🎤 Nasmej društvo</button>
       </div>
 
-      <button id="generate" class="primary">Napravi odgovore</button>
+      <button id="generate" class="primary">Napravi najbolji odgovor</button>
     </section>
 
     <section id="results" class="results" aria-live="polite"></section>
@@ -109,10 +113,14 @@
   <template id="replyTemplate">
     <article class="reply-card">
       <div class="reply-number"></div>
-      <p class="reply-text"></p>
-      <div class="reply-actions">
-        <button class="share-button">📤 Pošalji u Viber</button>
-        <button class="copy-button">Kopiraj</button>
+      <div class="reply-content">
+        <span class="reply-badge"></span>
+        <p class="reply-text"></p>
+        <div class="reply-actions">
+          <button class="share-button">📤 Pošalji u Viber</button>
+          <button class="shorten-button">✂️ Skrati</button>
+          <button class="copy-button">Kopiraj</button>
+        </div>
       </div>
     </article>
   </template>
