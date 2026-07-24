@@ -14,8 +14,8 @@
   <main class="app-shell">
     <header class="hero">
       <span class="eyebrow">Tvoj navijački pomoćnik</span>
-      <h1>⚽ Navijački AI</h1>
-      <p>Nalepi poruku sa Vibera, izaberi ton i uzmi najbolji odgovor.</p>
+      <h1>⚽🏀 Navijački AI</h1>
+      <p>Nalepi poruku sa Vibera, a aplikacija može sama da prepozna sport i smisli odgovor.</p>
     </header>
 
     <section class="card settings-grid" aria-label="Podešavanja">
@@ -38,8 +38,10 @@
       <label>
         Sport
         <select id="sport">
+          <option value="auto">Automatski prepoznaj</option>
           <option value="fudbal">Fudbal</option>
           <option value="košarka">Košarka</option>
+          <option value="oba">Fudbal i košarka</option>
         </select>
       </label>
       <label>
@@ -51,7 +53,10 @@
     <section class="card">
       <label for="message">Njegova poruka</label>
       <textarea id="message" rows="5" maxlength="600" placeholder="Nalepi ovde njegovu prozivku…"></textarea>
-      <div class="message-meta"><span id="charCount">0/600</span></div>
+      <div class="message-meta">
+        <span id="detectedSport">Sport: automatski</span>
+        <span id="charCount">0/600</span>
+      </div>
 
       <div class="tone-grid" role="group" aria-label="Izaberi ton odgovora">
         <button class="tone active" data-tone="duhovit">🤣 Duhovit</button>
