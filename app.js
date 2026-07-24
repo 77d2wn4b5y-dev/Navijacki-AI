@@ -100,7 +100,7 @@ function baseReplies(ctx) {
   const switchLines = [
     `${ctx.friend}, sport se ne menja usred rasprave samo zato što rezultat više ne odgovara.`,
     `Završimo prvo ${ctx.detected === 'košarka' ? 'košarku' : 'fudbal'}, pa onda otvaramo rezervnu temu.`,
-    `Menjaš sport brže nego TV kanal — prvo odgovori na ono što si već otvorio.`,
+    'Menjaš sport brže nego TV kanal — prvo odgovori na ono što si već otvorio.',
   ];
   if (ctx.changedTopic) return switchLines;
 
@@ -108,38 +108,38 @@ function baseReplies(ctx) {
     duhovit: [
       `${ctx.friend}, toliko pratiš ${ctx.myClub} da ćemo ti uskoro poslati člansku kartu.`,
       `Više vremena trošiš na ${ctx.myClub} nego na ${ctx.rival}. To više nije rivalstvo, to je pretplata.`,
-      `Dobra prozivka. Još samo da joj dodamo jednu činjenicu i biće kompletna.`,
+      'Dobra prozivka. Još samo da joj dodamo jednu činjenicu i biće kompletna.',
     ],
     cinjenice: [
-      `Pošalji tačan podatak, sezonu i takmičenje. Onda možemo ozbiljno da poredimo.`,
-      `Jedna utakmica ne briše sezonu, kao što jedna pobeda ne rešava celu istoriju.`,
-      `Rezultat je činjenica, ali su važni i period, takmičenje i kontekst.`,
+      'Pošalji tačan podatak, sezonu i takmičenje. Onda možemo ozbiljno da poredimo.',
+      'Jedna utakmica ne briše sezonu, kao što jedna pobeda ne rešava celu istoriju.',
+      'Rezultat je činjenica, ali su važni i period, takmičenje i kontekst.',
     ],
     ostar: [
-      `Kad ponestanu argumenti, ostanu velika slova, stikeri i promena teme.`,
-      `Ne brini za moj klub. Objasni prvo zašto ti je moj klub glavna tema posle svake utakmice.`,
-      `Javi se kad budeš imao podatak, a ne samo navijački slogan.`,
+      'Kad ponestanu argumenti, ostanu velika slova, stikeri i promena teme.',
+      'Ne brini za moj klub. Objasni prvo zašto ti je moj klub glavna tema posle svake utakmice.',
+      'Javi se kad budeš imao podatak, a ne samo navijački slogan.',
     ],
     kulturan: [
       `Čestitam kada je zasluženo, ali ja ostajem uz ${ctx.myClub} i kada pobedi i kada izgubi.`,
-      `Rivalstvo je najbolje kada ostane na šali i dobrim argumentima.`,
-      `Možemo da se ne slažemo, ali hajde bez preterivanja i sa tačnim podacima.`,
+      'Rivalstvo je najbolje kada ostane na šali i dobrim argumentima.',
+      'Možemo da se ne slažemo, ali hajde bez preterivanja i sa tačnim podacima.',
     ],
     istorijski: [
-      `Jedan rezultat je trenutak, a istorija kluba su decenije, trofeji, generacije i utakmice.`,
-      `Arhiva je bolji sudija od navijačkog pamćenja — navedimo sezonu i takmičenje.`,
+      'Jedan rezultat je trenutak, a istorija kluba su decenije, trofeji, generacije i utakmice.',
+      'Arhiva je bolji sudija od navijačkog pamćenja — navedimo sezonu i takmičenje.',
       `${ctx.myClub} ima dovoljno istorije da nema potrebe da se bilo šta izmišlja ili ulepšava.`,
     ],
     grupa: [
       `${ctx.friend} je upravo aktivirao rezervni sport jer glavni argument više nije dostupan.`,
-      `Stručni štab javlja: 5% činjenica, 95% navijačkog samopouzdanja.`,
-      `Imamo promenu taktike — sa rezultata se prelazi na parole bez zaustavljanja igre.`,
+      'Stručni štab javlja: 5% činjenica, 95% navijačkog samopouzdanja.',
+      'Imamo promenu taktike — sa rezultata se prelazi na parole bez zaustavljanja igre.',
     ],
   };
   return byTone[state.tone] || byTone.duhovit;
 }
 
-function applyPersona(text, persona, ctx) {
+function applyPersona(text, persona) {
   const wrappers = {
     normalan: (value) => value,
     komentator: (value) => `Ulazimo u završnicu rasprave! ${value}`,
@@ -148,7 +148,7 @@ function applyPersona(text, persona, ctx) {
     trener: (value) => `Taktičko uputstvo: ${value} Držimo se teme i ne menjamo formaciju usred napada.`,
     novinar: (value) => `Prema nezvaničnim informacijama iz Viber redakcije: ${value}`,
   };
-  return wrappers[persona](text, ctx);
+  return wrappers[persona](text);
 }
 
 function renderAnalysis(analysis) {
@@ -195,6 +195,40 @@ function escapeHtml(value) {
   return String(value).replace(/[&<>'"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[char]);
 }
 
+async function copyReply(text, button) {
+  try {
+    await navigator.clipboard.writeText(text);
+    button.textContent = 'Kopirano ✓';
+    button.classList.add('copied');
+    setTimeout(() => {
+      button.textContent = 'Kopiraj';
+      button.classList.remove('copied');
+    }, 1600);
+    return true;
+  } catch {
+    window.prompt('Kopiraj odgovor:', text);
+    return false;
+  }
+}
+
+async function shareReply(text, button) {
+  if (navigator.share) {
+    try {
+      await navigator.share({ text });
+      button.textContent = 'Poslato na deljenje ✓';
+      setTimeout(() => { button.textContent = '📤 Pošalji u Viber'; }, 1800);
+      return;
+    } catch (error) {
+      if (error && error.name === 'AbortError') return;
+    }
+  }
+
+  const copied = await copyReply(text, button);
+  if (copied) {
+    alert('Odgovor je kopiran. Otvori Viber i nalepi ga u razgovor.');
+  }
+}
+
 function generate() {
   const ctx = context();
   if (!ctx.incoming) {
@@ -206,24 +240,20 @@ function generate() {
   renderAnalysis(ctx);
   const raw = baseReplies(ctx);
   const openers = toneOpeners[state.tone];
-  const generated = raw.map((reply, index) => applyPersona(`${openers[index % openers.length]}${reply}`, ctx.persona, ctx));
+  const generated = raw.map((reply, index) => applyPersona(`${openers[index % openers.length]}${reply}`, ctx.persona));
   results.innerHTML = '';
 
   generated.forEach((text, index) => {
     const node = template.content.cloneNode(true);
     node.querySelector('.reply-number').textContent = index + 1;
     node.querySelector('.reply-text').textContent = text;
+
     const copyButton = node.querySelector('.copy-button');
-    copyButton.addEventListener('click', async () => {
-      try {
-        await navigator.clipboard.writeText(text);
-        copyButton.textContent = 'Kopirano ✓';
-        copyButton.classList.add('copied');
-        setTimeout(() => { copyButton.textContent = 'Kopiraj'; copyButton.classList.remove('copied'); }, 1600);
-      } catch {
-        window.prompt('Kopiraj odgovor:', text);
-      }
-    });
+    const shareButton = node.querySelector('.share-button');
+
+    copyButton.addEventListener('click', () => copyReply(text, copyButton));
+    shareButton.addEventListener('click', () => shareReply(text, shareButton));
+
     results.appendChild(node);
   });
 
